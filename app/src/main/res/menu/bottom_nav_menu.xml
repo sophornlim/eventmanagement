@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@android:drawable/ic_dialog_dialer"
+        android:title="ផ្ទាំងគ្រប់គ្រង" />
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="ព្រឹត្តិការណ៍" />
+    <item
+        android:id="@+id/navigation_participants"
+        android:icon="@android:drawable/ic_menu_mylocation"
+        android:title="អ្នកចូលរួម" />
+    <item
+        android:id="@+id/navigation_account"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="គណនី" />
+</menu>

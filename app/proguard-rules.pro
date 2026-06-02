@@ -1,0 +1,1 @@
+# Android Studio custom proguard rules.
