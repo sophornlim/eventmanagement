@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
             String password = etPassword.getText().toString();
 
             if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(LoginActivity.this, "Please enter username and password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "អត្តលេខនិស្សិត ឬ អ៊ីមែល និង លេខសម្ងាត់ឱ្យបានត្រឹមត្រូវ។", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (user != null) {
                         new SessionManager(LoginActivity.this).login(user.getId());
-                        Toast.makeText(LoginActivity.this, "Login Successful! Welcome " + user.getName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "ចូលប្រើប្រាស់ដោយជោគជ័យ! សូមស្វាគមន៍ " + user.getName(), Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {
