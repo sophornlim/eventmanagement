@@ -90,7 +90,7 @@ public class EditProfileActivity extends AppCompatActivity {
         String avatarUrl = selectedImageUri != null ? selectedImageUri.toString() : "";
 
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "សូមបំពេញព័ត៌មានឱ្យបានគ្រប់គ្រាន់", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -106,7 +106,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
                 db.studentDao().updateStudent(user);
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "ព័ត៌មានត្រូវបានកែប្រែដោយជោគជ័យ", Toast.LENGTH_SHORT).show();
                     finish();
                 });
             }

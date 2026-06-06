@@ -139,7 +139,7 @@ public class CreateEventActivity extends AppCompatActivity {
         String imageUrl = selectedImageUri != null ? selectedImageUri.toString() : "";
 
         if (title.isEmpty() || desc.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "សូមបំពេញព័ត៌មានឱ្យបានគ្រប់គ្រាន់", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -152,7 +152,7 @@ public class CreateEventActivity extends AppCompatActivity {
             try {
                 AppDatabase.getInstance(this).eventDao().insertEvent(event);
                 runOnUiThread(() -> {
-                    String message = isEditMode ? "Event Updated Successfully" : "Event Created Successfully";
+                    String message = isEditMode ? "ព្រឹត្តិការណ៍ត្រូវបានកែប្រែដោយជោគជ័យ" : "ព្រឹត្តិការណ៍ត្រូវបានបង្កើតដោយជោគជ័យ";
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                     finish();
                 });
