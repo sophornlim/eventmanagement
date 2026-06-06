@@ -57,7 +57,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.location.setText(event.getLocation());
 
         if (event.getImageUrl() != null && !event.getImageUrl().isEmpty()) {
-            holder.image.setImageURI(Uri.parse(event.getImageUrl()));
+            try {
+                holder.image.setImageURI(Uri.parse(event.getImageUrl()));
+            } catch (Exception e) {
+                holder.image.setImageResource(R.drawable.ic_launcher_background);
+                e.printStackTrace();
+            }
         } else {
             holder.image.setImageResource(R.drawable.ic_launcher_background);
         }

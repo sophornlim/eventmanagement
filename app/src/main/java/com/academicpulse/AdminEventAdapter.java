@@ -65,7 +65,12 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Vi
         holder.registrations.setText(String.format("%d / 500", event.getCapacity()));
 
         if (event.getImageUrl() != null && !event.getImageUrl().isEmpty()) {
-            holder.image.setImageURI(Uri.parse(event.getImageUrl()));
+            try {
+                holder.image.setImageURI(Uri.parse(event.getImageUrl()));
+            } catch (Exception e) {
+                holder.image.setImageResource(R.drawable.ic_launcher_background);
+                e.printStackTrace();
+            }
         } else {
             holder.image.setImageResource(R.drawable.ic_launcher_background);
         }

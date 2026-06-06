@@ -35,8 +35,8 @@ public class CreateEventActivity extends AppCompatActivity {
     private EditText etDate;
     private EditText etTime;
 
-    private final ActivityResultLauncher<String> pickImage = registerForActivityResult(
-            new ActivityResultContracts.GetContent(),
+    private final ActivityResultLauncher<String[]> pickImage = registerForActivityResult(
+            new ActivityResultContracts.OpenDocument(),
             uri -> {
                 if (uri != null) {
                     try {
@@ -70,7 +70,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        findViewById(R.id.card_image_picker).setOnClickListener(v -> pickImage.launch("image/*"));
+        findViewById(R.id.card_image_picker).setOnClickListener(v -> pickImage.launch(new String[]{"image/*"}));
 
         etDate.setOnClickListener(v -> showDatePicker());
         etTime.setOnClickListener(v -> showTimePicker());

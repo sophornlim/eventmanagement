@@ -1,5 +1,6 @@
 package com.academicpulse;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -27,10 +28,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private Uri selectedImageUri = null;
 
-    private final ActivityResultLauncher<String> pickImage = registerForActivityResult(
-            new ActivityResultContracts.GetContent(),
+    private final ActivityResultLauncher<String[]> pickImage = registerForActivityResult(
+            new ActivityResultContracts.OpenDocument(),
             uri -> {
                 if (uri != null) {
+                    try {
+                        getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     selectedImageUri = uri;
                     ivProfile.setImageURI(uri);
                 }
@@ -53,7 +59,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         loadUserData();
 
-        findViewById(R.id.profile_image_edit_container).setOnClickListener(v -> pickImage.launch("image/*"));
+        findViewById(R.id.profile_image_edit_container).setOnClickListener(v -> pickImage.launch(new String[]{"image/*"}));
 
         findViewById(R.id.btn_update).setOnClickListener(v -> updateProfile());
     }
@@ -71,7 +77,12 @@ public class EditProfileActivity extends AppCompatActivity {
                     etEmail.setText(user.getEmail());
                     etPassword.setText(user.getPassword());
                     if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty()) {
-                        ivProfile.setImageURI(Uri.parse(user.getAvatarUrl()));
+                        try {
+                            ivProfile.setImageURI(Uri.parse(user.getAvatarUrl()));
+                        } catch (Exception e) {
+                            ivProfile.setImageResource(R.drawable.ic_default_avatar);
+                            e.printStackTrace();
+                        }
                     } else {
                         ivProfile.setImageResource(R.drawable.ic_default_avatar);
                     }

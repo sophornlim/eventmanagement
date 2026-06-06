@@ -40,7 +40,12 @@ public class EventDetailActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tv_description)).setText(desc);
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
-            ((ImageView) findViewById(R.id.iv_header)).setImageURI(Uri.parse(imageUrl));
+            try {
+                ((ImageView) findViewById(R.id.iv_header)).setImageURI(Uri.parse(imageUrl));
+            } catch (Exception e) {
+                ((ImageView) findViewById(R.id.iv_header)).setImageResource(R.drawable.ic_launcher_background);
+                e.printStackTrace();
+            }
         }
 
         setupInfoRow(findViewById(R.id.row_date), "កាលបរិច្ឆេទ", date, android.R.drawable.ic_menu_today);
