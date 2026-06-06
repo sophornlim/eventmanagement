@@ -20,19 +20,19 @@ public class EventDetailActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> finish());
 
         String title = getIntent().getStringExtra("EVENT_TITLE");
-        if (title == null) title = "Event Title";
+        if (title == null) title = "ឈ្មោះព្រឹត្តិការណ៍";
         
         String desc = getIntent().getStringExtra("EVENT_DESC");
-        if (desc == null) desc = "No description provided.";
+        if (desc == null) desc = "មិនមានការពិពណ៌នាអំពីព្រឹត្តិការណ៍";
         
         String date = getIntent().getStringExtra("EVENT_DATE");
-        if (date == null) date = "Date";
+        if (date == null) date = "កាលបរិច្ឆេទ";
         
         String time = getIntent().getStringExtra("EVENT_TIME");
-        if (time == null) time = "Time";
+        if (time == null) time = "ម៉ោង";
         
         String location = getIntent().getStringExtra("EVENT_LOCATION");
-        if (location == null) location = "Location";
+        if (location == null) location = "ទីតាំង";
         
         String imageUrl = getIntent().getStringExtra("EVENT_IMAGE");
 
