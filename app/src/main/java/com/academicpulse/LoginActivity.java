@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {
-                        Toast.makeText(LoginActivity.this, "Invalid User Name or Password!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "អត្តលេខនិស្សិត ឬ អ៊ីមែល / លេខសម្ងាត់មិនត្រឹមត្រូវ!", Toast.LENGTH_SHORT).show();
                     }
                 });
             });
