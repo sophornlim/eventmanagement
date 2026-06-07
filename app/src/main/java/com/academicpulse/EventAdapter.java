@@ -10,12 +10,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.academicpulse.database.AppDatabase;
 import com.academicpulse.database.entity.Event;
+import com.academicpulse.database.entity.Registration;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.Executors;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
@@ -77,6 +85,35 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             intent.putExtra("EVENT_LOCATION", event.getLocation());
             intent.putExtra("EVENT_IMAGE", event.getImageUrl());
             context.startActivity(intent);
+        });
+
+        holder.btnRegister.setOnClickListener(v -> {
+            Context context = holder.itemView.getContext();
+            SessionManager sessionManager = new SessionManager(context);
+            String userId = sessionManager.getUserId();
+
+            if (userId == null) {
+                Toast.makeText(context, "សូមចូលប្រើប្រាស់ជាមុនសិន", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Executors.newSingleThreadExecutor().execute(() -> {
+                try {
+                    AppDatabase db = AppDatabase.getInstance(context);
+                    String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+                    Registration registration = new Registration(userId, event.getId(), timestamp, "Registered");
+                    
+                    db.registrationDao().insertRegistration(registration);
+                    
+                    if (context instanceof android.app.Activity) {
+                        ((android.app.Activity) context).runOnUiThread(() -> {
+                            Toast.makeText(context, "ចុះឈ្មោះជោគជ័យ!", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         });
     }
 
