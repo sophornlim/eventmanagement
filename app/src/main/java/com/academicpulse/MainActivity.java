@@ -3,7 +3,10 @@ package com.academicpulse;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import com.academicpulse.database.AppDatabase;
+import com.academicpulse.database.entity.Student;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -30,9 +33,23 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // Default fragment
+        // Default fragment based on role
         if (savedInstanceState == null) {
-            bottomNav.setSelectedItemId(R.id.navigation_home);
+            String userId = new SessionManager(this).getUserId();
+            if (userId != null) {
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    Student user = AppDatabase.getInstance(this).studentDao().getStudentById(userId);
+                    runOnUiThread(() -> {
+                        if (user != null && "admin".equals(user.getRole())) {
+                            bottomNav.setSelectedItemId(R.id.navigation_dashboard);
+                        } else {
+                            bottomNav.setSelectedItemId(R.id.navigation_home);
+                        }
+                    });
+                });
+            } else {
+                bottomNav.setSelectedItemId(R.id.navigation_home);
+            }
         }
     }
 
