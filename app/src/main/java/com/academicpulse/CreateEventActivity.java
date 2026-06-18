@@ -76,8 +76,8 @@ public class CreateEventActivity extends AppCompatActivity {
         etTime.setOnClickListener(v -> showTimePicker());
 
         Spinner spinner = findViewById(R.id.spinner_category);
-        String[] categories = {"Academic", "Social", "Sports", "Workshop"};
-        spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, categories));
+        String[] displayCategories = {"ការសិក្សា", "សង្គម", "កីឡា", "សិក្ខាសាលា"};
+        spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, displayCategories));
 
         if (isEditMode && eventId != -1) {
             loadEventData();
@@ -111,8 +111,18 @@ public class CreateEventActivity extends AppCompatActivity {
                     ((EditText) findViewById(R.id.et_title)).setText(event.getTitle());
                     ((EditText) findViewById(R.id.et_description)).setText(event.getDescription());
                     ((EditText) findViewById(R.id.et_location)).setText(event.getLocation());
+                    ((EditText) findViewById(R.id.et_capacity)).setText(String.valueOf(event.getCapacity()));
+                    ((EditText) findViewById(R.id.et_speaker_name)).setText(event.getSpeakerName());
+                    ((EditText) findViewById(R.id.et_speaker_role)).setText(event.getSpeakerRole());
+                    ((EditText) findViewById(R.id.et_organizer)).setText(event.getOrganizer());
                     etDate.setText(event.getDate());
                     etTime.setText(event.getTime());
+
+                    // Set spinner selection
+                    Spinner spinner = findViewById(R.id.spinner_category);
+                    ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+                    int pos = adapter.getPosition(event.getCategory());
+                    if (pos != -1) spinner.setSelection(pos);
 
                     if (event.getImageUrl() != null && !event.getImageUrl().isEmpty()) {
                         try {
@@ -133,6 +143,10 @@ public class CreateEventActivity extends AppCompatActivity {
         String title = ((EditText) findViewById(R.id.et_title)).getText().toString();
         String desc = ((EditText) findViewById(R.id.et_description)).getText().toString();
         String location = ((EditText) findViewById(R.id.et_location)).getText().toString();
+        String capacityStr = ((EditText) findViewById(R.id.et_capacity)).getText().toString();
+        String speakerName = ((EditText) findViewById(R.id.et_speaker_name)).getText().toString();
+        String speakerRole = ((EditText) findViewById(R.id.et_speaker_role)).getText().toString();
+        String organizer = ((EditText) findViewById(R.id.et_organizer)).getText().toString();
         String date = etDate.getText().toString();
         String time = etTime.getText().toString();
         String category = ((Spinner) findViewById(R.id.spinner_category)).getSelectedItem().toString();
@@ -143,7 +157,15 @@ public class CreateEventActivity extends AppCompatActivity {
             return;
         }
 
-        Event event = new Event(title, desc, imageUrl, category, location, date, time, 101, 100, "Active");
+        int capacity = 0;
+        try {
+            capacity = Integer.parseInt(capacityStr);
+        } catch (NumberFormatException ignored) {}
+
+        Event event = new Event(title, desc, imageUrl, category, location, date, time, 101, capacity, "Active");
+        event.setSpeakerName(speakerName);
+        event.setSpeakerRole(speakerRole);
+        event.setOrganizer(organizer);
         if (isEditMode) {
             event.setId(eventId);
         }

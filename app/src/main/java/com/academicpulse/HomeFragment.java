@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,15 +16,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.academicpulse.database.AppDatabase;
 import com.academicpulse.database.entity.Event;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private EventAdapter adapter;
+    private List<Event> allEvents = new ArrayList<>();
+    private String currentCategory = "ទាំងអស់";
+    private String currentQuery = "";
 
     @Nullable
     @Override
@@ -53,6 +59,44 @@ public class HomeFragment extends Fragment {
         adapter = new EventAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
 
+        SearchView searchView = view.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                currentQuery = query;
+                applyFilters();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                currentQuery = newText;
+                applyFilters();
+                return true;
+            }
+        });
+
+        ChipGroup chipGroup = view.findViewById(R.id.chip_group);
+        chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            if (checkedIds.isEmpty()) {
+                currentCategory = "ទាំងអស់";
+            } else {
+                int id = checkedIds.get(0);
+                if (id == R.id.chip_all) {
+                    currentCategory = "ទាំងអស់";
+                } else if (id == R.id.chip_academic) {
+                    currentCategory = "ការសិក្សា";
+                } else if (id == R.id.chip_social) {
+                    currentCategory = "សង្គម";
+                } else if (id == R.id.chip_sports) {
+                    currentCategory = "កីឡា";
+                } else if (id == R.id.chip_workshop) {
+                    currentCategory = "សិក្ខាសាលា";
+                }
+            }
+            applyFilters();
+        });
+
         return view;
     }
 
@@ -65,12 +109,18 @@ public class HomeFragment extends Fragment {
     private void loadEvents() {
         AppDatabase db = AppDatabase.getInstance(requireContext());
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Event> events = db.eventDao().getAllEvents();
+            allEvents = db.eventDao().getAllEvents();
             if (getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
-                    adapter.updateEvents(events);
-                });
+                getActivity().runOnUiThread(this::applyFilters);
             }
         });
+    }
+
+    private void applyFilters() {
+        List<Event> filtered = allEvents.stream()
+                .filter(e -> "ទាំងអស់".equals(currentCategory) || e.getCategory().equalsIgnoreCase(currentCategory))
+                .filter(e -> currentQuery.isEmpty() || e.getTitle().toLowerCase().contains(currentQuery.toLowerCase()))
+                .collect(Collectors.toList());
+        adapter.updateEvents(filtered);
     }
 }

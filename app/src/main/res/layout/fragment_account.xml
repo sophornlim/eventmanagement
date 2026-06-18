@@ -114,13 +114,5 @@
             app:strokeColor="#C62828"
             app:strokeWidth="1dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:text="Version 2.4.0 • Academic Pulse"
-            android:textColor="@color/text_grey"
-            android:textSize="12sp" />
-
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

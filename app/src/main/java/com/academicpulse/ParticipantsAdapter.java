@@ -3,6 +3,7 @@ package com.academicpulse;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,9 +17,18 @@ import java.util.List;
 public class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapter.ViewHolder> {
 
     private List<Student> participants;
+    private OnDeleteClickListener deleteListener;
+
+    public interface OnDeleteClickListener {
+        void onDeleteClick(Student student);
+    }
 
     public ParticipantsAdapter(List<Student> participants) {
         this.participants = participants;
+    }
+
+    public void setOnDeleteClickListener(OnDeleteClickListener listener) {
+        this.deleteListener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -26,6 +36,7 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapte
         public final TextView id;
         public final TextView status;
         public final ImageView avatar;
+        public final ImageButton btnDelete;
 
         public ViewHolder(View view) {
             super(view);
@@ -33,6 +44,7 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapte
             id = view.findViewById(R.id.tv_participant_id);
             status = view.findViewById(R.id.tv_participant_status);
             avatar = view.findViewById(R.id.iv_participant_avatar);
+            btnDelete = view.findViewById(R.id.btn_delete_participant);
         }
     }
 
@@ -49,6 +61,15 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<ParticipantsAdapte
         holder.name.setText(student.getName());
         holder.id.setText(String.format("ID: %s", student.getId()));
         holder.status.setText("admin".equals(student.getRole()) ? "Administrator" : "បានចុះឈ្មោះ");
+
+        // Only show delete button if listener is set (usually only in Admin's ParticipantsFragment)
+        holder.btnDelete.setVisibility(deleteListener != null ? View.VISIBLE : View.GONE);
+
+        holder.btnDelete.setOnClickListener(v -> {
+            if (deleteListener != null) {
+                deleteListener.onDeleteClick(student);
+            }
+        });
     }
 
     @Override

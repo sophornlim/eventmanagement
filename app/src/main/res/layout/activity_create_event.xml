@@ -167,6 +167,59 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="ចំនួនអ្នកចូលរួមអតិបរមា">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_capacity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="វាគ្មិនកិត្តិយស"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="ឈ្មោះវាគ្មិន">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_speaker_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="តួនាទីវាគ្មិន">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_speaker_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="អ្នករៀបចំ">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_organizer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <Button
                 android:id="@+id/btn_save"
                 android:layout_width="match_parent"

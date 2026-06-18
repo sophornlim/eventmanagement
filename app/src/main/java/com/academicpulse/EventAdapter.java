@@ -78,12 +78,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.itemView.setOnClickListener(v -> {
             Context context = holder.itemView.getContext();
             Intent intent = new Intent(context, EventDetailActivity.class);
-            intent.putExtra("EVENT_TITLE", event.getTitle());
-            intent.putExtra("EVENT_DESC", event.getDescription());
-            intent.putExtra("EVENT_DATE", event.getDate());
-            intent.putExtra("EVENT_TIME", event.getTime());
-            intent.putExtra("EVENT_LOCATION", event.getLocation());
-            intent.putExtra("EVENT_IMAGE", event.getImageUrl());
+            intent.putExtra("EVENT_ID", event.getId());
             context.startActivity(intent);
         });
 

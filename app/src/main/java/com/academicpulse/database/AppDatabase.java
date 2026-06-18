@@ -16,7 +16,7 @@ import com.academicpulse.database.entity.*;
         Registration.class,
         Notification.class
     },
-    version = 2,
+    version = 4,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {

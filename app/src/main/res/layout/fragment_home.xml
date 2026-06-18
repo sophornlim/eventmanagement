@@ -78,6 +78,7 @@
                     app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_all"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -85,22 +86,32 @@
                         android:checked="true" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_academic"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ការសិក្សា" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_social"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="សង្គម" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_sports"
                         style="@style/Widget.MaterialComponents.Chip.Choice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="កីឡា" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip_workshop"
+                        style="@style/Widget.MaterialComponents.Chip.Choice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="សិក្ខាសាលា" />
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
         </LinearLayout>

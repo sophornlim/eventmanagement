@@ -15,5 +15,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Academic Pulse"
+rootProject.name = "Event Management"
 include ':app'

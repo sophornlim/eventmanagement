@@ -50,6 +50,15 @@ public class Event {
     @ColumnInfo(name = "status")
     private String status;
 
+    @ColumnInfo(name = "speaker_name")
+    private String speakerName;
+
+    @ColumnInfo(name = "speaker_role")
+    private String speakerRole;
+
+    @ColumnInfo(name = "organizer")
+    private String organizer;
+
     public Event(String title, String description, String imageUrl, String category, 
                  String location, String date, String time, int departmentId, int capacity, String status) {
         this.title = title;
@@ -96,4 +105,13 @@ public class Event {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getSpeakerName() { return speakerName; }
+    public void setSpeakerName(String speakerName) { this.speakerName = speakerName; }
+
+    public String getSpeakerRole() { return speakerRole; }
+    public void setSpeakerRole(String speakerRole) { this.speakerRole = speakerRole; }
+
+    public String getOrganizer() { return organizer; }
+    public void setOrganizer(String organizer) { this.organizer = organizer; }
 }
