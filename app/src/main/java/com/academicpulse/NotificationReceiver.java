@@ -14,17 +14,29 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent == null || intent.getAction() == null) return;
-        
-        String title = intent.getStringExtra("title");
-        String message = intent.getStringExtra("message");
-        int eventId = intent.getIntExtra("eventId", 0);
+        if (intent == null || intent.getAction() == null) {
+            return;
+        }
 
-        // 1. Save to database so it shows up in the notification list
-        NotificationHelper.saveNotificationToDb(context, title, message, "Reminder");
+        String action = intent.getAction();
 
-        // 2. Show system notification alert
-        showSystemNotification(context, title, message, eventId);
+        if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
+            // Phone restarted, reschedule all saved alarms
+            NotificationHelper.rescheduleAllReminders(context);
+        } else if (NotificationHelper.ACTION_EVENT_REMINDER.equals(action)) {
+            // This is our scheduled alarm
+            String title = intent.getStringExtra("title");
+            String message = intent.getStringExtra("message");
+            int eventId = intent.getIntExtra("eventId", 0);
+
+            if (title != null && message != null) {
+                // 1. Save to database so it shows up in the notification list
+                NotificationHelper.saveNotificationToDb(context, title, message, "Reminder");
+
+                // 2. Show system notification alert
+                showSystemNotification(context, title, message, eventId);
+            }
+        }
     }
 
     private void showSystemNotification(Context context, String title, String message, int eventId) {

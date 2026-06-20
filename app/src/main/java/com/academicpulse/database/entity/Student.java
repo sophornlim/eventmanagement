@@ -27,6 +27,9 @@ public class Student {
     @ColumnInfo(name = "password")
     private String password;
 
+    @ColumnInfo(name = "gender")
+    private String gender; // "Male" | "Female" | "Other"
+
     public Student(@NonNull String id, String name, String email, String avatarUrl, String role, String password) {
         this.id = id;
         this.name = name;
@@ -34,6 +37,7 @@ public class Student {
         this.avatarUrl = avatarUrl;
         this.role = role;
         this.password = password;
+        this.gender = "Other"; // Default
     }
 
     @NonNull
@@ -54,4 +58,7 @@ public class Student {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
 }

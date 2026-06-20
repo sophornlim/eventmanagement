@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -24,6 +26,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private ImageView ivProfile;
+    private RadioGroup rgGender;
 
     private Uri selectedImageUri = null;
 
@@ -55,6 +58,7 @@ public class EditProfileActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
         ivProfile = findViewById(R.id.iv_edit_profile);
+        rgGender = findViewById(R.id.rg_edit_gender);
 
         loadUserData();
 
@@ -77,6 +81,13 @@ public class EditProfileActivity extends AppCompatActivity {
                     etName.setText(user.getName());
                     etEmail.setText(user.getEmail());
                     etPassword.setText(user.getPassword());
+
+                    if ("Male".equalsIgnoreCase(user.getGender())) {
+                        rgGender.check(R.id.rb_edit_male);
+                    } else if ("Female".equalsIgnoreCase(user.getGender())) {
+                        rgGender.check(R.id.rb_edit_female);
+                    }
+
                     if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty()) {
                         try {
                             ivProfile.setImageURI(Uri.parse(user.getAvatarUrl()));
@@ -101,11 +112,20 @@ public class EditProfileActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
         String avatarUrl = selectedImageUri != null ? selectedImageUri.toString() : "";
 
+        int selectedGenderId = rgGender.getCheckedRadioButtonId();
+        String gender = "Other";
+        if (selectedGenderId == R.id.rb_edit_male) {
+            gender = "Male";
+        } else if (selectedGenderId == R.id.rb_edit_female) {
+            gender = "Female";
+        }
+
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "សូមបំពេញព័ត៌មានឱ្យបានគ្រប់គ្រាន់", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        String finalGender = gender;
         Executors.newSingleThreadExecutor().execute(() -> {
             AppDatabase db = AppDatabase.getInstance(this);
             Student user = db.studentDao().getStudentById(userId);
@@ -113,6 +133,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 user.setName(name);
                 user.setEmail(email);
                 user.setPassword(password);
+                user.setGender(finalGender);
                 if (!avatarUrl.isEmpty()) {
                     user.setAvatarUrl(avatarUrl);
                 }

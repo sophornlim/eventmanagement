@@ -15,7 +15,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_back_straight">
+            app:navigationIcon="@drawable/ic_back_straight"
+            app:navigationIconTint="@color/primary_blue">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

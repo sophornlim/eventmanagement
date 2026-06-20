@@ -9,17 +9,23 @@ import android.os.Build;
 import com.academicpulse.database.AppDatabase;
 import com.academicpulse.database.entity.Event;
 import com.academicpulse.database.entity.Notification;
+import com.academicpulse.database.relational.RegistrationWithEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 
 public class NotificationHelper {
 
+    public static final String ACTION_EVENT_REMINDER = "com.academicpulse.ACTION_EVENT_REMINDER";
+
     public static void scheduleEventReminder(Context context, Event event) {
-        if (event == null || event.getDate() == null || event.getTime() == null) return;
+        if (event == null || event.getDate() == null || event.getTime() == null) {
+            return;
+        }
 
         try {
             // Parse date and time. Format: "yyyy-MM-dd" and "hh:mm a"
@@ -39,6 +45,7 @@ public class NotificationHelper {
 
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(context, NotificationReceiver.class);
+            intent.setAction(ACTION_EVENT_REMINDER);
             intent.putExtra("title", "រំលឹកព្រឹត្តិការណ៍: " + event.getTitle());
             intent.putExtra("message", "ព្រឹត្តិការណ៍នឹងចាប់ផ្តើមក្នុងរយៈពេល ១០ នាទីទៀត");
             intent.putExtra("eventId", event.getId());
@@ -72,5 +79,23 @@ public class NotificationHelper {
                 db.notificationDao().insertNotification(notification);
             });
         }
+    }
+
+    public static void rescheduleAllReminders(Context context) {
+        SessionManager sessionManager = new SessionManager(context);
+        String userId = sessionManager.getUserId();
+        if (userId == null) {
+            return;
+        }
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(context);
+            List<RegistrationWithEvent> registrations = db.registrationDao().getRegistrationsWithEventsForStudent(userId);
+            for (RegistrationWithEvent reg : registrations) {
+                if (reg.event != null) {
+                    scheduleEventReminder(context, reg.event);
+                }
+            }
+        });
     }
 }

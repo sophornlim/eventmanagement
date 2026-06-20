@@ -4,6 +4,8 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.academicpulse.database.dao.*;
 import com.academicpulse.database.entity.*;
@@ -16,7 +18,7 @@ import com.academicpulse.database.entity.*;
         Registration.class,
         Notification.class
     },
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -29,6 +31,13 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract RegistrationDao registrationDao();
     public abstract NotificationDao notificationDao();
 
+    static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE students ADD COLUMN gender TEXT DEFAULT 'Other'");
+        }
+    };
+
     public static AppDatabase getInstance(final Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -38,6 +47,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class,
                             "academic_pulse_database.db"
                     )
+                    .addMigrations(MIGRATION_4_5)
                     .build();
                 }
             }
