@@ -33,18 +33,29 @@ public class DashboardFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rv_dashboard_events);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         
-        adapter = new AdminEventAdapter(new ArrayList<>(), event -> {
-            Intent intent = new Intent(requireContext(), CreateEventActivity.class);
-            intent.putExtra("EVENT_ID", event.getId());
-            intent.putExtra("EDIT_MODE", true);
-            startActivity(intent);
-        }, event -> {
-            AppDatabase db = AppDatabase.getInstance(requireContext());
-            Executors.newSingleThreadExecutor().execute(() -> {
-                db.eventDao().deleteEvent(event);
-                loadData();
-            });
-        });
+        adapter = new AdminEventAdapter(new ArrayList<>(), 
+            event -> {
+                // On Edit
+                Intent intent = new Intent(requireContext(), CreateEventActivity.class);
+                intent.putExtra("EVENT_ID", event.getId());
+                intent.putExtra("EDIT_MODE", true);
+                startActivity(intent);
+            }, 
+            event -> {
+                // On Delete
+                AppDatabase db = AppDatabase.getInstance(requireContext());
+                Executors.newSingleThreadExecutor().execute(() -> {
+                    db.eventDao().deleteEvent(event);
+                    loadData();
+                });
+            },
+            event -> {
+                // On Item Click (Detail)
+                Intent intent = new Intent(requireContext(), EventDetailActivity.class);
+                intent.putExtra("EVENT_ID", event.getId());
+                startActivity(intent);
+            }
+        );
         recyclerView.setAdapter(adapter);
 
         return view;

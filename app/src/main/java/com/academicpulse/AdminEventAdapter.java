@@ -24,11 +24,13 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Vi
     private List<Event> events;
     private final OnEventClickListener onEdit;
     private final OnEventClickListener onDelete;
+    private final OnEventClickListener onDetail;
 
-    public AdminEventAdapter(List<Event> events, OnEventClickListener onEdit, OnEventClickListener onDelete) {
+    public AdminEventAdapter(List<Event> events, OnEventClickListener onEdit, OnEventClickListener onDelete, OnEventClickListener onDetail) {
         this.events = events;
         this.onEdit = onEdit;
         this.onDelete = onDelete;
+        this.onDetail = onDetail;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -69,11 +71,16 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Vi
                 holder.image.setImageURI(Uri.parse(event.getImageUrl()));
             } catch (Exception e) {
                 holder.image.setImageResource(R.drawable.ic_launcher_background);
-                e.printStackTrace();
             }
         } else {
             holder.image.setImageResource(R.drawable.ic_launcher_background);
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (onDetail != null) {
+                onDetail.onEventClick(event);
+            }
+        });
 
         holder.btnEdit.setOnClickListener(v -> onEdit.onEventClick(event));
         holder.btnDelete.setOnClickListener(v -> onDelete.onEventClick(event));

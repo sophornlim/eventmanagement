@@ -1,5 +1,6 @@
 package com.academicpulse;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -7,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -90,7 +90,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(this, (view, year, month, day) -> {
-            String dateStr = String.format("%04d-%02d-%02d", year, month + 1, day);
+            @SuppressLint("DefaultLocale") String dateStr = String.format("%04d-%02d-%02d", year, month + 1, day);
             etDate.setText(dateStr);
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
@@ -98,7 +98,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private void showTimePicker() {
         Calendar calendar = Calendar.getInstance();
         new TimePickerDialog(this, (view, hour, minute) -> {
-            String timeStr = String.format("%02d:%02d", hour, minute);
+            @SuppressLint("DefaultLocale") String timeStr = String.format("%02d:%02d", hour, minute);
             etTime.setText(timeStr);
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
     }

@@ -59,7 +59,12 @@ public class AdminFragment extends Fragment {
                 intent.putExtra("EDIT_MODE", true);
                 startActivity(intent);
             },
-            this::deleteEvent
+            this::deleteEvent,
+            event -> {
+                Intent intent = new Intent(requireContext(), EventDetailActivity.class);
+                intent.putExtra("EVENT_ID", event.getId());
+                startActivity(intent);
+            }
         );
         recyclerView.setAdapter(adapter);
 
