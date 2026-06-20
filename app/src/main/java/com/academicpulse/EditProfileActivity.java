@@ -65,7 +65,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void loadUserData() {
         String userId = new SessionManager(this).getUserId();
-        if (userId == null) return;
+        if (userId == null) {
+            return;
+        }
 
         Executors.newSingleThreadExecutor().execute(() -> {
             Student user = AppDatabase.getInstance(this).studentDao().getStudentById(userId);

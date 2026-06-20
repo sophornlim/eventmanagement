@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
@@ -61,7 +62,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         Event event = events.get(position);
         holder.title.setText(event.getTitle());
-        holder.date.setText(String.format("%s • %s", event.getDate(), event.getTime()));
+        holder.date.setText(String.format(Locale.getDefault(), "%s • %s", event.getDate(), event.getTime()));
         holder.location.setText(event.getLocation());
 
         if (event.getImageUrl() != null && !event.getImageUrl().isEmpty()) {
@@ -88,7 +89,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             String userId = sessionManager.getUserId();
 
             if (userId == null) {
-                Toast.makeText(context, "សូមចូលប្រើប្រាស់ជាមុនសិន", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.please_login, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -100,10 +101,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                     
                     db.registrationDao().insertRegistration(registration);
                     
-                    if (context instanceof android.app.Activity) {
-                        ((android.app.Activity) context).runOnUiThread(() -> {
-                            Toast.makeText(context, "ចុះឈ្មោះជោគជ័យ!", Toast.LENGTH_SHORT).show();
-                        });
+                    if (context instanceof android.app.Activity activity) {
+                        activity.runOnUiThread(() -> Toast.makeText(context, R.string.register_success, Toast.LENGTH_SHORT).show());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

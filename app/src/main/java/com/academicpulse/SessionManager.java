@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SessionManager {
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
     private static final String PREF_NAME = "user_session";
     private static final String KEY_USER_ID = "user_id";
 

@@ -38,7 +38,6 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class,
                             "academic_pulse_database.db"
                     )
-                    .fallbackToDestructiveMigration() // Reset tables gracefully during development
                     .build();
                 }
             }

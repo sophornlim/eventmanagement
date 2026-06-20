@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.academicpulse.database.entity.Event;
 
 import java.util.List;
+import java.util.Locale;
 
 public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.ViewHolder> {
 
@@ -64,7 +65,7 @@ public class AdminEventAdapter extends RecyclerView.Adapter<AdminEventAdapter.Vi
         Event event = events.get(position);
         holder.title.setText(event.getTitle());
         holder.date.setText(event.getDate());
-        holder.registrations.setText(String.format("%d / 500", event.getCapacity()));
+        holder.registrations.setText(String.format(Locale.getDefault(), "%d / 500", event.getCapacity()));
 
         if (event.getImageUrl() != null && !event.getImageUrl().isEmpty()) {
             try {

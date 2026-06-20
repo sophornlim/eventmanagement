@@ -56,7 +56,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
 
                     <LinearLayout
                         android:id="@+id/layout_image_placeholder"
@@ -70,6 +71,7 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@android:drawable/ic_menu_gallery"
+                            android:contentDescription="@null"
                             app:tint="@color/text_grey" />
 
                         <TextView
@@ -111,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="ប្រភេទ"
+                android:text="@string/workshop"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
@@ -184,7 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="វាគ្មិនកិត្តិយស"
+                android:text="@string/speaker"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
@@ -227,7 +229,7 @@
                 android:layout_height="56dp"
                 android:layout_marginTop="32dp"
                 android:backgroundTint="@color/primary_blue"
-                android:text="រក្សាទុក"
+                android:text="@string/save"
                 android:textAllCaps="false"
                 app:cornerRadius="28dp" />
 
@@ -237,7 +239,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="8dp"
-                android:text="បោះបង់"
+                android:text="@string/cancel"
                 android:textAllCaps="false"
                 android:textColor="@color/text_grey"
                 app:cornerRadius="28dp"

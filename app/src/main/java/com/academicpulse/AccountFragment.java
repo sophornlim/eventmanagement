@@ -58,39 +58,41 @@ public class AccountFragment extends Fragment {
             }
         });
 
+        view.findViewById(R.id.iv_notifications).setOnClickListener(v -> startActivity(new Intent(requireContext(), NotificationsActivity.class)));
+
         view.findViewById(R.id.profile_image_container).setOnClickListener(v -> pickImage.launch(new String[]{"image/*"}));
         view.findViewById(R.id.btn_edit_profile).setOnClickListener(v -> pickImage.launch(new String[]{"image/*"}));
 
         loadUserData();
 
         setupMenuItem(view.findViewById(R.id.menu_personal_info), "ព័ត៌មានផ្ទាល់ខ្លួន", "គ្រប់គ្រងទិន្នន័យផ្ទាល់ខ្លួន", android.R.drawable.ic_menu_info_details);
+        setupMenuItem(view.findViewById(R.id.menu_registrations), "ការចុះឈ្មោះរបស់ខ្ញុំ", "មើលព្រឹត្តិការណ៍ដែលបានចុះឈ្មោះ", android.R.drawable.ic_menu_agenda);
         setupMenuItem(view.findViewById(R.id.menu_management), "ការគ្រប់គ្រង", "ចូលទៅកាន់ផ្នែកគ្រប់គ្រង", android.R.drawable.ic_menu_manage);
         setupMenuItem(view.findViewById(R.id.menu_dashboard), "ផ្ទាំងគ្រប់គ្រង", "មើលស្ថិតិសរុប", android.R.drawable.ic_dialog_dialer);
         setupMenuItem(view.findViewById(R.id.menu_guide), "របៀបប្រើប្រាស់", "ជំនួយក្នុងការប្រើប្រាស់កម្មវិធី", android.R.drawable.ic_menu_help);
 
-        view.findViewById(R.id.menu_personal_info).setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), EditProfileActivity.class));
-        });
+        view.findViewById(R.id.menu_personal_info).setOnClickListener(v -> startActivity(new Intent(requireContext(), EditProfileActivity.class)));
+
+        view.findViewById(R.id.menu_registrations).setOnClickListener(v -> getParentFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, new RegistrationsFragment())
+            .addToBackStack(null)
+            .commit());
 
         view.findViewById(R.id.menu_management).setOnClickListener(v -> {
-            if (getActivity() instanceof MainActivity) {
-                MainActivity activity = (MainActivity) getActivity();
+            if (getActivity() instanceof MainActivity activity) {
                 BottomNavigationView nav = activity.findViewById(R.id.bottom_navigation);
                 nav.setSelectedItemId(R.id.navigation_participants);
             }
         });
 
         view.findViewById(R.id.menu_dashboard).setOnClickListener(v -> {
-            if (getActivity() instanceof MainActivity) {
-                MainActivity activity = (MainActivity) getActivity();
+            if (getActivity() instanceof MainActivity activity) {
                 BottomNavigationView nav = activity.findViewById(R.id.bottom_navigation);
                 nav.setSelectedItemId(R.id.navigation_dashboard);
             }
         });
 
-        view.findViewById(R.id.menu_guide).setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), GuideActivity.class));
-        });
+        view.findViewById(R.id.menu_guide).setOnClickListener(v -> startActivity(new Intent(requireContext(), GuideActivity.class)));
 
         Button btnLogout = view.findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(v -> {

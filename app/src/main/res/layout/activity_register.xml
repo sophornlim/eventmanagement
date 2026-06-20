@@ -36,13 +36,14 @@
                     android:layout_height="64dp"
                     android:scaleType="centerInside"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/splashscreen" />
+                    android:src="@drawable/splashscreen"
+                    android:contentDescription="@string/app_name" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:text="ព្រឹត្តិការណ៍"
+                    android:text="@string/event"
                     android:textColor="@color/black"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -51,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="បង្កើតគណនីរបស់អ្នកដើម្បីចូលរួមកម្មវិធីផ្សេងៗនៅក្នុង\nសាកលវិទ្យាល័យ"
+                    android:text="@string/register_subtitle"
                     android:textColor="@color/text_grey"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -73,7 +74,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ឈ្មោះពេញ"
+                    android:text="@string/full_name"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -95,7 +96,7 @@
                         android:id="@+id/et_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="បញ្ចូលឈ្មោះរបស់អ្នក..."
+                        android:hint="@string/enter_name_hint"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -103,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="អត្តលេខនិស្សិត"
+                    android:text="@string/student_id"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -125,7 +126,7 @@
                         android:id="@+id/et_student_id"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="បញ្ចូលអត្តលេខនិស្សិត"
+                        android:hint="@string/enter_student_id_hint"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -133,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="អ៊ីមែលសាកលវិទ្យាល័យ"
+                    android:text="@string/university_email"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -163,7 +164,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="ពាក្យសម្ងាត់"
+                    android:text="@string/password"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -197,7 +198,7 @@
                     android:layout_height="56dp"
                     android:layout_marginTop="32dp"
                     android:backgroundTint="@color/primary_blue"
-                    android:text="ចុះឈ្មោះ"
+                    android:text="@string/register"
                     android:textAllCaps="false"
                     android:textSize="18sp"
                     app:cornerRadius="28dp" />
@@ -212,14 +213,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="មានគណនីរួចហើយ? "
+                        android:text="@string/already_have_account"
                         android:textColor="@color/text_grey" />
 
                     <TextView
                         android:id="@+id/tv_login"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ចូលប្រើប្រាស់"
+                        android:text="@string/login_now"
                         android:textColor="@color/primary_blue"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -241,7 +242,7 @@
                         android:layout_centerInParent="true"
                         android:background="#FFFFFF"
                         android:paddingHorizontal="12dp"
-                        android:text="ឬបន្តជាមួយ"
+                        android:text="@string/or_continue_with"
                         android:textColor="@color/text_grey"
                         android:textSize="12sp" />
                 </RelativeLayout>
@@ -305,11 +306,12 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@android:drawable/ic_menu_search"
+                    android:contentDescription="@null"
                     app:tint="@color/text_grey" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ភាសាខ្មែរ"
+                    android:text="@string/khmer_language"
                     android:textSize="10sp"
                     android:textColor="@color/text_grey" />
             </LinearLayout>
@@ -329,11 +331,12 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@android:drawable/ic_menu_help"
+                    android:contentDescription="@null"
                     app:tint="@color/text_grey" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ជំនួយ"
+                    android:text="@string/help"
                     android:textSize="10sp"
                     android:textColor="@color/text_grey" />
             </LinearLayout>
@@ -346,7 +349,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="© 2024 UNIVERSITY EVENT MANAGEMENT\nSYSTEM"
+            android:text="@string/copyright"
             android:textColor="@color/text_grey"
             android:textSize="10sp" />
 

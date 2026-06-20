@@ -9,6 +9,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 import com.academicpulse.database.entity.Registration;
 import com.academicpulse.database.relational.EventWithRegistrations;
+import com.academicpulse.database.relational.RegistrationWithEvent;
 import java.util.List;
 
 @Dao
@@ -27,6 +28,10 @@ public interface RegistrationDao {
 
     @Query("SELECT * FROM registrations WHERE event_id = :eventId")
     List<Registration> getRegistrationsForEvent(int eventId);
+
+    @Transaction
+    @Query("SELECT * FROM registrations WHERE student_id = :studentId")
+    List<RegistrationWithEvent> getRegistrationsWithEventsForStudent(String studentId);
 
     @Transaction
     @Query("SELECT * FROM events WHERE id = :eventId")

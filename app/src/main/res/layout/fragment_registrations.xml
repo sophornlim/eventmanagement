@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ព្រឹត្តិការណ៍"
+                android:text="ការចុះឈ្មោះរបស់ខ្ញុំ"
                 android:textColor="@color/primary_blue"
                 android:textSize="20sp"
                 android:textStyle="bold" />

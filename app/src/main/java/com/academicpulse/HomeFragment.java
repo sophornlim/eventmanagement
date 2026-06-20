@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
 
-    private RecyclerView recyclerView;
     private EventAdapter adapter;
     private List<Event> allEvents = new ArrayList<>();
     private String currentCategory = "ទាំងអស់";
@@ -45,15 +44,11 @@ public class HomeFragment extends Fragment {
             });
         }
 
-        view.findViewById(R.id.iv_notifications).setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), NotificationsActivity.class));
-        });
+        view.findViewById(R.id.iv_notifications).setOnClickListener(v -> startActivity(new Intent(requireContext(), NotificationsActivity.class)));
 
-        view.findViewById(R.id.fab_add).setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), CreateEventActivity.class));
-        });
+        view.findViewById(R.id.fab_add).setOnClickListener(v -> startActivity(new Intent(requireContext(), CreateEventActivity.class)));
 
-        recyclerView = view.findViewById(R.id.rv_events);
+        RecyclerView recyclerView = view.findViewById(R.id.rv_events);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         adapter = new EventAdapter(new ArrayList<>());

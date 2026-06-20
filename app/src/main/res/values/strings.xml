@@ -1,4 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Event Management</string>
+    <string name="create_event">បង្កើតព្រឹត្តិការណ៍</string>
+    <string name="edit_profile">កែប្រែព័ត៌មានផ្ទាល់ខ្លួន</string>
+    <string name="event">ព្រឹត្តិការណ៍</string>
+    <string name="notifications">ការជូនដំណឹង</string>
+    <string name="account">គណនី</string>
+    <string name="dashboard">ផ្ទាំងគ្រប់គ្រង</string>
+    <string name="participants">អ្នកចូលរួម</string>
+    <string name="save">រក្សាទុក</string>
+    <string name="cancel">បោះបង់</string>
+    <string name="logout">ចាកចេញ</string>
+    <string name="login">ចូលប្រើ</string>
+    <string name="register">ចុះឈ្មោះ</string>
+    <string name="all">ទាំងអស់</string>
+    <string name="academic">ការសិក្សា</string>
+    <string name="social">សង្គម</string>
+    <string name="sports">កីឡា</string>
+    <string name="workshop">សិក្ខាសាលា</string>
+    <string name="search">ស្វែងរក</string>
+    <string name="guide">របៀបប្រើប្រាស់</string>
+    <string name="ok">យល់ព្រម</string>
+    <string name="error">មានកំហុស</string>
+    <string name="success">ជោគជ័យ</string>
+
+    <!-- Register Activity -->
+    <string name="full_name">ឈ្មោះពេញ</string>
+    <string name="student_id">អត្តលេខនិស្សិត</string>
+    <string name="university_email">អ៊ីមែលសាកលវិទ្យាល័យ</string>
+    <string name="password">ពាក្យសម្ងាត់</string>
+    <string name="already_have_account">មានគណនីរួចហើយ? </string>
+    <string name="login_now">ចូលប្រើប្រាស់</string>
+    <string name="or_continue_with">ឬបន្តជាមួយ</string>
+    <string name="khmer_language">ភាសាខ្មែរ</string>
+    <string name="help">ជំនួយ</string>
+    <string name="copyright">© 2024 UNIVERSITY EVENT MANAGEMENT\nSYSTEM</string>
+    <string name="register_subtitle">បង្កើតគណនីរបស់អ្នកដើម្បីចូលរួមកម្មវិធីផ្សេងៗនៅក្នុង\nសាកលវិទ្យាល័យ</string>
+    <string name="enter_name_hint">បញ្ចូលឈ្មោះរបស់អ្នក&#8230;</string>
+    <string name="enter_student_id_hint">បញ្ចូលអត្តលេខនិស្សិត</string>
+
+    <!-- Login Activity -->
+    <string name="please_login">សូមចូលប្រើប្រាស់</string>
+    <string name="login_subtitle">បញ្ចូលព័ត៌មានគណនីរបស់អ្នកដើម្បីបន្ត</string>
+    <string name="no_account_register">មិនទាន់មានគណនី? ចុះឈ្មោះគណនីថ្មី</string>
+
+    <!-- Event Details -->
+    <string name="about_event">អំពីព្រឹត្តិការណ៍នេះ</string>
+    <string name="speaker">វាគ្មិនកិត្តិយស</string>
+    <string name="organizer">អ្នករៀបចំ</string>
+    <string name="register_now">ចុះឈ្មោះឥឡូវនេះ</string>
+    <string name="remind_me">រំលឹកខ្ញុំផង</string>
+    <string name="initializing">កំពុងរៀបចំទិន្នន័យ&#8230;</string>
+    <string name="fill_all_fields">សូមបំពេញព័ត៌មានឱ្យបានគ្រប់គ្រាន់។</string>
+    <string name="student_id_exists">អត្តលេខនិស្សិតធ្លាប់មានក្នុងប្រព័ន្ធរួចរាល់ហើយ!</string>
+    <string name="register_success">ការចុះឈ្មោះទទួួលបានជោគជ័យ!</string>
 </resources>

@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import com.academicpulse.database.AppDatabase;
 import com.academicpulse.database.entity.Student;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Objects;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 Executors.newSingleThreadExecutor().execute(() -> {
                     Student user = AppDatabase.getInstance(this).studentDao().getStudentById(userId);
                     runOnUiThread(() -> {
-                        if (user != null && "admin".equals(user.getRole())) {
+                        if (user != null && Objects.equals(user.getRole(), "admin")) {
                             bottomNav.setSelectedItemId(R.id.navigation_dashboard);
                         } else {
                             bottomNav.setSelectedItemId(R.id.navigation_home);

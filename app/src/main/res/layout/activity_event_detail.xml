@@ -40,7 +40,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@drawable/ic_launcher_background"
+                android:contentDescription="@null" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,14 +54,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/label_blue_bg"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="4dp"
-                        android:text="ការសិក្សា"
-                        android:textColor="@color/white"
-                        android:textSize="12sp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/label_blue_bg"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:text="@string/academic"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -97,7 +98,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="រំលឹកខ្ញុំផង"
+                        android:text="@string/remind_me"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -112,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="អំពីព្រឹត្តិការណ៍នេះ"
+                    android:text="@string/about_event"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -123,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:lineSpacingExtra="4dp"
-                    android:text="អត្ថបទពិពណ៌នាអំពីព្រឹត្តិការណ៍..."
+                    android:text="@string/enter_name_hint"
                     android:textColor="@color/text_grey"
                     android:textSize="16sp" />
 
@@ -132,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="វាគ្មិនកិត្តិយស"
+                    android:text="@string/speaker"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -144,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="អ្នករៀបចំ"
+                    android:text="@string/organizer"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -157,7 +158,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="បញ្ជីអ្នកចូលរួម"
+                    android:text="@string/participants"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -175,7 +176,7 @@
                     android:layout_height="56dp"
                     android:layout_marginTop="32dp"
                     android:backgroundTint="@color/primary_blue"
-                    android:text="ចុះឈ្មោះឥឡូវនេះ"
+                    android:text="@string/register_now"
                     android:textAllCaps="false"
                     android:textSize="18sp"
                     app:cornerRadius="28dp" />

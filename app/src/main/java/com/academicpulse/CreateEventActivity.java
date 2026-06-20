@@ -17,12 +17,20 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.academicpulse.database.AppDatabase;
 import com.academicpulse.database.entity.Event;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.concurrent.Executors;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 
 public class CreateEventActivity extends AppCompatActivity {
 
@@ -85,6 +93,16 @@ public class CreateEventActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_save).setOnClickListener(v -> saveEvent());
         findViewById(R.id.btn_cancel).setOnClickListener(v -> finish());
+
+        checkNotificationPermission();
+    }
+
+    private void checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
     }
 
     private void showDatePicker() {
@@ -98,9 +116,12 @@ public class CreateEventActivity extends AppCompatActivity {
     private void showTimePicker() {
         Calendar calendar = Calendar.getInstance();
         new TimePickerDialog(this, (view, hour, minute) -> {
-            @SuppressLint("DefaultLocale") String timeStr = String.format("%02d:%02d", hour, minute);
+            Calendar time = Calendar.getInstance();
+            time.set(Calendar.HOUR_OF_DAY, hour);
+            time.set(Calendar.MINUTE, minute);
+            @SuppressLint("DefaultLocale") String timeStr = new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(time.getTime());
             etTime.setText(timeStr);
-        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
     }
 
     private void loadEventData() {
@@ -111,7 +132,8 @@ public class CreateEventActivity extends AppCompatActivity {
                     ((EditText) findViewById(R.id.et_title)).setText(event.getTitle());
                     ((EditText) findViewById(R.id.et_description)).setText(event.getDescription());
                     ((EditText) findViewById(R.id.et_location)).setText(event.getLocation());
-                    ((EditText) findViewById(R.id.et_capacity)).setText(String.valueOf(event.getCapacity()));
+                    String capacityText = "" + event.getCapacity();
+                    ((EditText) findViewById(R.id.et_capacity)).setText(capacityText);
                     ((EditText) findViewById(R.id.et_speaker_name)).setText(event.getSpeakerName());
                     ((EditText) findViewById(R.id.et_speaker_role)).setText(event.getSpeakerRole());
                     ((EditText) findViewById(R.id.et_organizer)).setText(event.getOrganizer());
@@ -157,12 +179,12 @@ public class CreateEventActivity extends AppCompatActivity {
             return;
         }
 
-        int capacity = 0;
+        int capacityValue = 0;
         try {
-            capacity = Integer.parseInt(capacityStr);
+            capacityValue = Integer.parseInt(capacityStr);
         } catch (NumberFormatException ignored) {}
 
-        Event event = new Event(title, desc, imageUrl, category, location, date, time, 101, capacity, "Active");
+        Event event = new Event(title, desc, imageUrl, category, location, date, time, 101, capacityValue, "Active");
         event.setSpeakerName(speakerName);
         event.setSpeakerRole(speakerRole);
         event.setOrganizer(organizer);
@@ -172,7 +194,15 @@ public class CreateEventActivity extends AppCompatActivity {
 
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
-                AppDatabase.getInstance(this).eventDao().insertEvent(event);
+                long id = AppDatabase.getInstance(this).eventDao().insertEvent(event);
+                event.setId((int) id);
+                
+                NotificationHelper.scheduleEventReminder(this, event);
+                
+                String notifTitle = isEditMode ? "ព្រឹត្តិការណ៍ត្រូវបានកែប្រែ" : "ព្រឹត្តិការណ៍ត្រូវបានបង្កើត";
+                String notifMessage = "ព្រឹត្តិការណ៍ \"" + event.getTitle() + "\" ត្រូវបានរក្សាទុកដោយជោគជ័យ។";
+                NotificationHelper.saveNotificationToDb(this, notifTitle, notifMessage, "System");
+
                 runOnUiThread(() -> {
                     String message = isEditMode ? "ព្រឹត្តិការណ៍ត្រូវបានកែប្រែដោយជោគជ័យ" : "ព្រឹត្តិការណ៍ត្រូវបានបង្កើតដោយជោគជ័យ";
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -180,7 +210,8 @@ public class CreateEventActivity extends AppCompatActivity {
                 });
             } catch (Exception e) {
                 e.printStackTrace();
-                runOnUiThread(() -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                String errorMsg = "Error: " + e.getMessage();
+                runOnUiThread(() -> Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show());
             }
         });
     }

@@ -31,7 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
             String password = etPassword.getText().toString();
 
             if (name.isEmpty() || studentId.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "សូមបំពេញព័ត៌មានឱ្យបានគ្រប់គ្រាន់។", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.fill_all_fields, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
                 AppDatabase db = AppDatabase.getInstance(this);
                 Student existing = db.studentDao().getStudentById(studentId);
                 if (existing != null) {
-                    runOnUiThread(() -> Toast.makeText(this, "អត្តលេខនិស្សិតធ្លាប់មានក្នុងប្រព័ន្ធរួចរាល់ហើយ!", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(this, R.string.student_id_exists, Toast.LENGTH_SHORT).show());
                     return;
                 }
 
@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
                 db.studentDao().insertStudent(student);
                 
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "ការចុះឈ្មោះទទួួលបានជោគជ័យ!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show();
                     finish();
                 });
             });

@@ -5,10 +5,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Transaction;
 import androidx.room.Update;
 import com.academicpulse.database.entity.Department;
-import com.academicpulse.database.relational.DepartmentWithEvents;
 import java.util.List;
 
 @Dao
@@ -24,10 +22,6 @@ public interface DepartmentDao {
 
     @Query("SELECT * FROM departments WHERE id = :id LIMIT 1")
     Department getDepartmentById(int id);
-
-    @Transaction
-    @Query("SELECT * FROM departments WHERE id = :id")
-    DepartmentWithEvents getDepartmentWithEvents(int id);
 
     @Delete
     void deleteDepartment(Department department);

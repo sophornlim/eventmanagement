@@ -19,6 +19,7 @@
             android:background="@drawable/circle_blue_bg"
             android:padding="8dp"
             android:src="@android:drawable/ic_popup_reminder"
+            android:contentDescription="@string/notifications"
             app:tint="@color/white" />
 
         <LinearLayout

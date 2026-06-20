@@ -16,13 +16,26 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/ic_back_straight">
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="បញ្ជីអ្នកចូលរួម"
-                android:textColor="@color/primary_blue"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_marginEnd="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/participants"
+                    android:textColor="@color/primary_blue"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/iv_notifications"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@android:drawable/ic_popup_reminder"
+                    android:contentDescription="@string/notifications"
+                    app:tint="@color/primary_blue" />
+            </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
@@ -240,6 +253,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_input_add"
+        android:contentDescription="@string/register"
         app:backgroundTint="@color/primary_blue"
         app:tint="@color/white" />
 

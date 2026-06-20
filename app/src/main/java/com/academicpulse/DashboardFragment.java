@@ -18,7 +18,6 @@ import java.util.concurrent.Executors;
 
 public class DashboardFragment extends Fragment {
 
-    private RecyclerView recyclerView;
     private AdminEventAdapter adapter;
     private TextView tvTotalParticipants;
     private TextView tvTotalEvents;
@@ -30,7 +29,9 @@ public class DashboardFragment extends Fragment {
         tvTotalParticipants = view.findViewById(R.id.tv_total_participants);
         tvTotalEvents = view.findViewById(R.id.tv_total_events);
 
-        recyclerView = view.findViewById(R.id.rv_dashboard_events);
+        view.findViewById(R.id.iv_notifications).setOnClickListener(v -> startActivity(new Intent(requireContext(), NotificationsActivity.class)));
+
+        RecyclerView recyclerView = view.findViewById(R.id.rv_dashboard_events);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         
         adapter = new AdminEventAdapter(new ArrayList<>(), 

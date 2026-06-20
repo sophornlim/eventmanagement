@@ -28,7 +28,6 @@ import java.util.concurrent.Executors;
 
 public class EventDetailActivity extends AppCompatActivity {
     private int eventId;
-    private RecyclerView rvParticipants;
     private ParticipantsAdapter participantsAdapter;
     private Button btnRegister;
 
@@ -43,7 +42,7 @@ public class EventDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        rvParticipants = findViewById(R.id.rv_event_participants);
+        RecyclerView rvParticipants = findViewById(R.id.rv_event_participants);
         rvParticipants.setLayoutManager(new LinearLayoutManager(this));
         participantsAdapter = new ParticipantsAdapter(new ArrayList<>());
         rvParticipants.setAdapter(participantsAdapter);
@@ -71,6 +70,13 @@ public class EventDetailActivity extends AppCompatActivity {
                 
                 db.registrationDao().insertRegistration(registration);
                 
+                Event event = db.eventDao().getEventById(eventId);
+                NotificationHelper.scheduleEventReminder(this, event);
+                
+                String notifTitle = "ការចុះឈ្មោះជោគជ័យ";
+                String notifMessage = "អ្នកបានចុះឈ្មោះសម្រាប់ព្រឹត្តិការណ៍ \"" + event.getTitle() + "\"។";
+                NotificationHelper.saveNotificationToDb(this, notifTitle, notifMessage, "Registration");
+
                 runOnUiThread(() -> {
                     Toast.makeText(this, "ចុះឈ្មោះជោគជ័យ!", Toast.LENGTH_SHORT).show();
                     loadEventData(); // Refresh list
@@ -90,7 +96,7 @@ public class EventDetailActivity extends AppCompatActivity {
             EventWithRegistrations eventWithRegs = db.registrationDao().getEventWithRegistrations(eventId);
             
             List<Student> students = new ArrayList<>();
-            boolean alreadyRegistered = false;
+            boolean isAlreadyRegistered = false;
             String currentUserId = new SessionManager(this).getUserId();
 
             if (eventWithRegs != null && eventWithRegs.registrations != null) {
@@ -98,19 +104,20 @@ public class EventDetailActivity extends AppCompatActivity {
                     Student s = db.studentDao().getStudentById(reg.getStudentId());
                     if (s != null) {
                         students.add(s);
-                        if (s.getId().equals(currentUserId)) {
-                            alreadyRegistered = true;
+                        if (java.util.Objects.equals(s.getId(), currentUserId)) {
+                            isAlreadyRegistered = true;
                         }
                     }
                 }
             }
 
-            final boolean registered = alreadyRegistered;
+            final boolean registered = isAlreadyRegistered;
             runOnUiThread(() -> {
                 if (event != null) {
                     displayEvent(event);
                     participantsAdapter.updateParticipants(students);
-                    ((TextView) findViewById(R.id.tv_participants_label)).setText("បញ្ជីអ្នកចូលរួម (" + students.size() + ")");
+                    String participantsLabel = getString(R.string.participants) + " (" + students.size() + ")";
+                    ((TextView) findViewById(R.id.tv_participants_label)).setText(participantsLabel);
                     
                     if (registered) {
                         btnRegister.setEnabled(false);

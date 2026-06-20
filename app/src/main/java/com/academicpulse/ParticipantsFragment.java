@@ -19,12 +19,12 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 public class ParticipantsFragment extends Fragment {
 
-    private RecyclerView recyclerView;
     private ParticipantsAdapter adapter;
     private TextView tvTotalParticipants;
     private TextView tvRegisteredCount;
@@ -49,12 +49,14 @@ public class ParticipantsFragment extends Fragment {
             });
         }
 
+        view.findViewById(R.id.iv_notifications).setOnClickListener(v -> startActivity(new Intent(requireContext(), NotificationsActivity.class)));
+
         tvTotalParticipants = view.findViewById(R.id.tv_total_participants);
         tvRegisteredCount = view.findViewById(R.id.tv_registered_count);
         tvAttendedCount = view.findViewById(R.id.tv_attended_count);
         layoutRecentActivities = view.findViewById(R.id.layout_recent_activities);
 
-        recyclerView = view.findViewById(R.id.rv_participants);
+        RecyclerView recyclerView = view.findViewById(R.id.rv_participants);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         
         adapter = new ParticipantsAdapter(new ArrayList<>());
@@ -101,9 +103,7 @@ public class ParticipantsFragment extends Fragment {
             applyFilters();
         });
 
-        View.OnClickListener onAddParticipantClick = v -> {
-            startActivity(new Intent(requireContext(), RegisterActivity.class));
-        };
+        View.OnClickListener onAddParticipantClick = v -> startActivity(new Intent(requireContext(), RegisterActivity.class));
 
         view.findViewById(R.id.card_add_participant).setOnClickListener(onAddParticipantClick);
         view.findViewById(R.id.fab_add_participant).setOnClickListener(onAddParticipantClick);
@@ -126,21 +126,22 @@ public class ParticipantsFragment extends Fragment {
             allRegistrations = db.registrationDao().getAllRegistrations();
             
             // Calculate attended as a subset of registrations
-            int registered = allRegistrations.size();
-            int attended = 0;
+            int registeredCount = allRegistrations.size();
+            int attendedCount = 0;
             for (Registration r : allRegistrations) {
                 if ("attended".equalsIgnoreCase(r.getStatus())) {
-                    attended++;
+                    attendedCount++;
                 }
             }
 
             final int finalTotal = allParticipants.size();
-            final int finalRegistered = registered;
-            final int finalAttended = attended;
+            final int finalRegistered = registeredCount;
+            final int finalAttended = attendedCount;
 
             if (getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
-                    tvTotalParticipants.setText(finalTotal + " នាក់");
+                    String totalText = finalTotal + " នាក់";
+                    tvTotalParticipants.setText(totalText);
                     tvRegisteredCount.setText(String.valueOf(finalRegistered));
                     tvAttendedCount.setText(String.valueOf(finalAttended));
                     updateRecentActivities(allRegistrations, allParticipants);
@@ -156,10 +157,12 @@ public class ParticipantsFragment extends Fragment {
                         s.getName().toLowerCase().contains(currentQuery.toLowerCase()) ||
                         s.getId().toLowerCase().contains(currentQuery.toLowerCase()))
                 .filter(s -> {
-                    if ("ទាំងអស់".equals(currentFilter)) return true;
+                    if ("ទាំងអស់".equals(currentFilter)) {
+                        return true;
+                    }
                     // Check if student has a registration with matching status
                     return allRegistrations.stream().anyMatch(r -> 
-                            r.getStudentId().equals(s.getId()) && 
+                            Objects.equals(r.getStudentId(), s.getId()) && 
                             r.getStatus().equalsIgnoreCase(currentFilter));
                 })
                 .collect(Collectors.toList());
@@ -176,7 +179,7 @@ public class ParticipantsFragment extends Fragment {
             Registration reg = registrations.get(i);
             Student student = null;
             for (Student s : students) {
-                if (s.getId().equals(reg.getStudentId())) {
+                if (Objects.equals(s.getId(), reg.getStudentId())) {
                     student = s;
                     break;
                 }
@@ -189,7 +192,7 @@ public class ParticipantsFragment extends Fragment {
                         getResources().getColor(R.color.primary_blue, null) : 
                         getResources().getColor(R.color.success_green, null);
                 
-                tv.setText("• " + student.getName() + " " + action);
+                tv.setText(String.format("• %s %s", student.getName(), action));
                 tv.setTextColor(color);
                 tv.setTextSize(12);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
