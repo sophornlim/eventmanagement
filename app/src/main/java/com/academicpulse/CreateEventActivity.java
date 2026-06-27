@@ -21,10 +21,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.academicpulse.database.AppDatabase;
+import com.academicpulse.database.entity.Department;
 import com.academicpulse.database.entity.Event;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 
@@ -37,6 +40,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private int eventId = -1;
     private boolean isEditMode = false;
     private Uri selectedImageUri = null;
+    private List<Department> departments = new ArrayList<>();
 
     private ImageView ivPreview;
     private View layoutPlaceholder;
@@ -83,13 +87,7 @@ public class CreateEventActivity extends AppCompatActivity {
         etDate.setOnClickListener(v -> showDatePicker());
         etTime.setOnClickListener(v -> showTimePicker());
 
-        Spinner spinner = findViewById(R.id.spinner_category);
-        String[] displayCategories = {"ការសិក្សា", "សង្គម", "កីឡា", "សិក្ខាសាលា"};
-        spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, displayCategories));
-
-        if (isEditMode && eventId != -1) {
-            loadEventData();
-        }
+        loadDepartments();
 
         findViewById(R.id.btn_save).setOnClickListener(v -> saveEvent());
         findViewById(R.id.btn_cancel).setOnClickListener(v -> finish());
@@ -122,6 +120,24 @@ public class CreateEventActivity extends AppCompatActivity {
             @SuppressLint("DefaultLocale") String timeStr = new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(time.getTime());
             etTime.setText(timeStr);
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
+    }
+
+    private void loadDepartments() {
+        Spinner spinner = findViewById(R.id.spinner_category);
+        Executors.newSingleThreadExecutor().execute(() -> {
+            departments = AppDatabase.getInstance(this).departmentDao().getAllDepartments();
+            List<String> names = new ArrayList<>();
+            for (Department department : departments) {
+                names.add(department.getName());
+            }
+            runOnUiThread(() -> {
+                spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, names));
+                // Populate fields only after the spinner is ready so the saved category can be reselected
+                if (isEditMode && eventId != -1) {
+                    loadEventData();
+                }
+            });
+        });
     }
 
     private void loadEventData() {
@@ -171,7 +187,11 @@ public class CreateEventActivity extends AppCompatActivity {
         String organizer = ((EditText) findViewById(R.id.et_organizer)).getText().toString();
         String date = etDate.getText().toString();
         String time = etTime.getText().toString();
-        String category = ((Spinner) findViewById(R.id.spinner_category)).getSelectedItem().toString();
+        Spinner spinner = findViewById(R.id.spinner_category);
+        int selectedPos = spinner.getSelectedItemPosition();
+        String category = spinner.getSelectedItem() != null ? spinner.getSelectedItem().toString() : "";
+        int departmentId = (selectedPos >= 0 && selectedPos < departments.size())
+                ? departments.get(selectedPos).getId() : 101;
         String imageUrl = selectedImageUri != null ? selectedImageUri.toString() : "";
 
         if (title.isEmpty() || desc.isEmpty()) {
@@ -184,7 +204,7 @@ public class CreateEventActivity extends AppCompatActivity {
             capacityValue = Integer.parseInt(capacityStr);
         } catch (NumberFormatException ignored) {}
 
-        Event event = new Event(title, desc, imageUrl, category, location, date, time, 101, capacityValue, "Active");
+        Event event = new Event(title, desc, imageUrl, category, location, date, time, departmentId, capacityValue, "Active");
         event.setSpeakerName(speakerName);
         event.setSpeakerRole(speakerRole);
         event.setOrganizer(organizer);

@@ -48,6 +48,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             "academic_pulse_database.db"
                     )
                     .addMigrations(MIGRATION_4_5)
+                    .fallbackToDestructiveMigration()
                     .build();
                 }
             }

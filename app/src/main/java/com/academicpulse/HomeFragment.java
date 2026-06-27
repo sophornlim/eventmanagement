@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.academicpulse.database.AppDatabase;
+import com.academicpulse.database.entity.Department;
 import com.academicpulse.database.entity.Event;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
@@ -25,9 +27,12 @@ import java.util.stream.Collectors;
 
 public class HomeFragment extends Fragment {
 
+    private static final String CATEGORY_ALL = "ទាំងអស់";
+
     private EventAdapter adapter;
+    private ChipGroup chipGroup;
     private List<Event> allEvents = new ArrayList<>();
-    private String currentCategory = "ទាំងអស់";
+    private String currentCategory = CATEGORY_ALL;
     private String currentQuery = "";
 
     @Nullable
@@ -71,28 +76,52 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ChipGroup chipGroup = view.findViewById(R.id.chip_group);
+        chipGroup = view.findViewById(R.id.chip_group);
         chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
             if (checkedIds.isEmpty()) {
-                currentCategory = "ទាំងអស់";
+                currentCategory = CATEGORY_ALL;
             } else {
-                int id = checkedIds.get(0);
-                if (id == R.id.chip_all) {
-                    currentCategory = "ទាំងអស់";
-                } else if (id == R.id.chip_academic) {
-                    currentCategory = "ការសិក្សា";
-                } else if (id == R.id.chip_social) {
-                    currentCategory = "សង្គម";
-                } else if (id == R.id.chip_sports) {
-                    currentCategory = "កីឡា";
-                } else if (id == R.id.chip_workshop) {
-                    currentCategory = "សិក្ខាសាលា";
-                }
+                Chip chip = group.findViewById(checkedIds.get(0));
+                currentCategory = (chip != null && chip.getTag() != null)
+                        ? chip.getTag().toString() : CATEGORY_ALL;
             }
             applyFilters();
         });
 
+        loadCategories();
+
         return view;
+    }
+
+    private void loadCategories() {
+        AppDatabase db = AppDatabase.getInstance(requireContext());
+        Executors.newSingleThreadExecutor().execute(() -> {
+            List<Department> departments = db.departmentDao().getAllDepartments();
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> buildCategoryChips(departments));
+            }
+        });
+    }
+
+    private void buildCategoryChips(List<Department> departments) {
+        if (chipGroup == null) return;
+        chipGroup.removeAllViews();
+        LayoutInflater inflater = getLayoutInflater();
+
+        // "All" chip, selected by default
+        Chip allChip = (Chip) inflater.inflate(R.layout.item_chip_choice, chipGroup, false);
+        allChip.setText(R.string.all);
+        allChip.setTag(CATEGORY_ALL);
+        allChip.setChecked(true);
+        chipGroup.addView(allChip);
+
+        // One chip per department loaded from the departments table
+        for (Department department : departments) {
+            Chip chip = (Chip) inflater.inflate(R.layout.item_chip_choice, chipGroup, false);
+            chip.setText(department.getName());
+            chip.setTag(department.getName());
+            chipGroup.addView(chip);
+        }
     }
 
     @Override
@@ -113,7 +142,7 @@ public class HomeFragment extends Fragment {
 
     private void applyFilters() {
         List<Event> filtered = allEvents.stream()
-                .filter(e -> "ទាំងអស់".equals(currentCategory) || e.getCategory().equalsIgnoreCase(currentCategory))
+                .filter(e -> CATEGORY_ALL.equals(currentCategory) || e.getCategory().equalsIgnoreCase(currentCategory))
                 .filter(e -> currentQuery.isEmpty() || e.getTitle().toLowerCase().contains(currentQuery.toLowerCase()))
                 .collect(Collectors.toList());
         adapter.updateEvents(filtered);

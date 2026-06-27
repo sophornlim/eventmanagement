@@ -30,15 +30,19 @@ public class SplashActivity extends AppCompatActivity {
             // 2. Pre-populate Departments
             List<Department> depts = db.departmentDao().getAllDepartments();
             if (depts.isEmpty()) {
-                db.departmentDao().insertDepartment(new Department(101, "Computer Science & Tech", "CS"));
-                db.departmentDao().insertDepartment(new Department(102, "Engineering", "ENG"));
-                db.departmentDao().insertDepartment(new Department(103, "Arts & Humanities", "ART"));
+                db.departmentDao().insertDepartment(new Department(101, "ការសិក្សា", "EDU"));
+                db.departmentDao().insertDepartment(new Department(102, "សង្គម", "SC"));
+                db.departmentDao().insertDepartment(new Department(103, "កីឡា", "SP"));
+                db.departmentDao().insertDepartment(new Department(104, "សិក្ខាសាលា", "WS"));
+            } else if (db.departmentDao().getDepartmentById(104) == null) {
+                // Backfill the Workshop department for installs seeded before it was added
+                db.departmentDao().insertDepartment(new Department(104, "សិក្ខាសាលា", "WS"));
             }
         });
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
             finish();
-        }, 2000);
+        }, 3000);
     }
 }
