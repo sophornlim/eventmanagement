@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             if (currentFragment instanceof DashboardFragment) {
                 bottomNav.getMenu().findItem(R.id.navigation_dashboard).setChecked(true);
-            } else if (currentFragment instanceof HomeFragment) {
+            } else if (currentFragment instanceof EventFragment) {
                 bottomNav.getMenu().findItem(R.id.navigation_home).setChecked(true);
             } else if (currentFragment instanceof ParticipantsFragment) {
                 bottomNav.getMenu().findItem(R.id.navigation_participants).setChecked(true);
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.navigation_dashboard) {
             return new DashboardFragment();
         } else if (itemId == R.id.navigation_home) {
-            return new HomeFragment();
+            return new EventFragment();
         } else if (itemId == R.id.navigation_participants) {
             return new ParticipantsFragment();
         } else if (itemId == R.id.navigation_account) {

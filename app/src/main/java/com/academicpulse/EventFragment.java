@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-public class HomeFragment extends Fragment {
+public class EventFragment extends Fragment {
 
     private static final String CATEGORY_ALL = "ទាំងអស់";
 
@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_event, container, false);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         if (toolbar != null) {
