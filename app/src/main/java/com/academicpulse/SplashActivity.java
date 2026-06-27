@@ -34,9 +34,6 @@ public class SplashActivity extends AppCompatActivity {
                 db.departmentDao().insertDepartment(new Department(102, "សង្គម", "SC"));
                 db.departmentDao().insertDepartment(new Department(103, "កីឡា", "SP"));
                 db.departmentDao().insertDepartment(new Department(104, "សិក្ខាសាលា", "WS"));
-            } else if (db.departmentDao().getDepartmentById(104) == null) {
-                // Backfill the Workshop department for installs seeded before it was added
-                db.departmentDao().insertDepartment(new Department(104, "សិក្ខាសាលា", "WS"));
             }
         });
 

@@ -2,3 +2,18 @@
 /.gradle/
 /app/build/
 /app/build/intermediates/javac/debug/classes/
+
+# Android SDK
+/sdk/
+sdk/
+local.properties
+
+# Build
+/build/
+*.apk
+*.aab
+
+# IDE
+/.idea/
+*.iml
+.DS_Store

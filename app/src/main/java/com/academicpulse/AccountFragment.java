@@ -28,7 +28,6 @@ public class AccountFragment extends Fragment {
     private ImageView ivProfile;
     private TextView tvName;
     private TextView tvEmail;
-
     private final ActivityResultLauncher<String[]> pickImage = registerForActivityResult(
             new ActivityResultContracts.OpenDocument(),
             uri -> {
