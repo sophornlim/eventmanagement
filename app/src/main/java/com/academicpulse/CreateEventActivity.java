@@ -1,6 +1,7 @@
 package com.academicpulse;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.academicpulse.database.AppDatabase;
+import com.academicpulse.database.dao.DepartmentDao;
 import com.academicpulse.database.entity.Department;
 import com.academicpulse.database.entity.Event;
 
@@ -89,6 +92,8 @@ public class CreateEventActivity extends AppCompatActivity {
 
         loadDepartments();
 
+        findViewById(R.id.tv_manage_departments).setOnClickListener(v -> showDepartmentManager());
+
         findViewById(R.id.btn_save).setOnClickListener(v -> saveEvent());
         findViewById(R.id.btn_cancel).setOnClickListener(v -> finish());
 
@@ -123,20 +128,149 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void loadDepartments() {
-        Spinner spinner = findViewById(R.id.spinner_category);
         Executors.newSingleThreadExecutor().execute(() -> {
             departments = AppDatabase.getInstance(this).departmentDao().getAllDepartments();
-            List<String> names = new ArrayList<>();
-            for (Department department : departments) {
-                names.add(department.getName());
-            }
             runOnUiThread(() -> {
-                spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, names));
+                populateDepartmentSpinner();
                 // Populate fields only after the spinner is ready so the saved category can be reselected
                 if (isEditMode && eventId != -1) {
                     loadEventData();
                 }
             });
+        });
+    }
+
+    private void populateDepartmentSpinner() {
+        Spinner spinner = findViewById(R.id.spinner_category);
+        List<String> names = new ArrayList<>();
+        for (Department department : departments) {
+            names.add(department.getName());
+        }
+        spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, names));
+    }
+
+    private void selectDepartmentById(int id) {
+        Spinner spinner = findViewById(R.id.spinner_category);
+        for (int i = 0; i < departments.size(); i++) {
+            if (departments.get(i).getId() == id) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
+    // ---- Department management (create / modify / view) ----
+
+    private void showDepartmentManager() {
+        if (departments == null) departments = new ArrayList<>();
+        String[] items = new String[departments.size() + 1];
+        for (int i = 0; i < departments.size(); i++) {
+            Department d = departments.get(i);
+            items[i] = d.getName() + " (" + d.getCode() + ")";
+        }
+        items[departments.size()] = "➕ បន្ថែមប្រភេទព្រឹត្តិការណ៍ថ្មី";
+
+        new AlertDialog.Builder(this)
+                .setTitle("គ្រប់គ្រងប្រភេទព្រឹត្តិការណ៍")
+                .setItems(items, (dialog, which) -> {
+                    if (which == departments.size()) {
+                        showDepartmentEditor(null);
+                    } else {
+                        showDepartmentEditor(departments.get(which));
+                    }
+                })
+                .setNegativeButton("បិទ", null)
+                .show();
+    }
+
+    private void showDepartmentEditor(Department existing) {
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        int pad = (int) (20 * getResources().getDisplayMetrics().density);
+        layout.setPadding(pad, pad / 2, pad, 0);
+
+        EditText etName = new EditText(this);
+        etName.setHint("ប្រភេទព្រឹត្តិការណ៍");
+        EditText etCode = new EditText(this);
+        etCode.setHint("លេខកូដ");
+        if (existing != null) {
+            etName.setText(existing.getName());
+            etCode.setText(existing.getCode());
+        }
+        layout.addView(etName);
+        layout.addView(etCode);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(existing == null ? "បន្ថែមប្រភេទព្រឹត្តិការណ៍" : "កែប្រែប្រភេទព្រឹត្តិការណ៍")
+                .setView(layout)
+                .setPositiveButton("រក្សាទុក", (d, w) -> {
+                    String name = etName.getText().toString().trim();
+                    String code = etCode.getText().toString().trim();
+                    if (name.isEmpty()) {
+                        Toast.makeText(this, "សូមបញ្ចូលប្រភេទព្រឹត្តិការណ៍", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    saveDepartment(existing, name, code);
+                })
+                .setNegativeButton("បោះបង់", null);
+
+        if (existing != null) {
+            builder.setNeutralButton("លុប", (d, w) -> confirmDeleteDepartment(existing));
+        }
+        builder.show();
+    }
+
+    private void saveDepartment(Department existing, String name, String code) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            DepartmentDao dao = AppDatabase.getInstance(this).departmentDao();
+            int targetId;
+            if (existing == null) {
+                // Plain (non auto-generated) primary key, so derive the next free id.
+                int maxId = 100;
+                for (Department d : dao.getAllDepartments()) {
+                    if (d.getId() > maxId) maxId = d.getId();
+                }
+                targetId = maxId + 1;
+                dao.insertDepartment(new Department(targetId, name, code));
+            } else {
+                existing.setName(name);
+                existing.setCode(code);
+                dao.updateDepartment(existing);
+                targetId = existing.getId();
+            }
+            departments = dao.getAllDepartments();
+            runOnUiThread(() -> {
+                populateDepartmentSpinner();
+                selectDepartmentById(targetId);
+                Toast.makeText(this, existing == null ? "បានបន្ថែមប្រភេទព្រឹត្តិការណ៍" : "បានកែប្រែប្រភេទព្រឹត្តិការណ៍", Toast.LENGTH_SHORT).show();
+            });
+        });
+    }
+
+    private void confirmDeleteDepartment(Department dept) {
+        new AlertDialog.Builder(this)
+                .setTitle("លុបប្រភេទព្រឹត្តិការណ៍")
+                .setMessage("តើអ្នកប្រាកដជាចង់លុប \"" + dept.getName() + "\" មែនទេ? ព្រឹត្តិការណ៍ដែលជាប់ទាក់ទងនឹងត្រូវលុបផងដែរ។")
+                .setPositiveButton("លុប", (d, w) -> deleteDepartment(dept))
+                .setNegativeButton("បោះបង់", null)
+                .show();
+    }
+
+    private void deleteDepartment(Department dept) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                DepartmentDao dao = AppDatabase.getInstance(this).departmentDao();
+                dao.deleteDepartment(dept);
+                departments = dao.getAllDepartments();
+                runOnUiThread(() -> {
+                    populateDepartmentSpinner();
+                    Toast.makeText(this, "បានលុបប្រភេទព្រឹត្តិការណ៍", Toast.LENGTH_SHORT).show();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                String msg = "មិនអាចលុបប្រភេទព្រឹត្តិការណ៍បានទេ";
+                runOnUiThread(() -> Toast.makeText(this, msg, Toast.LENGTH_LONG).show());
+            }
         });
     }
 

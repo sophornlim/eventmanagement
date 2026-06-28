@@ -54,4 +54,6 @@
     <string name="fill_all_fields">សូមបំពេញព័ត៌មានឱ្យបានគ្រប់គ្រាន់។</string>
     <string name="student_id_exists">អត្តលេខនិស្សិតធ្លាប់មានក្នុងប្រព័ន្ធរួចរាល់ហើយ!</string>
     <string name="register_success">ការចុះឈ្មោះទទួួលបានជោគជ័យ!</string>
+    <string name="notif_welcome_title">សូមស្វាគមន៍!</string>
+    <string name="notif_welcome_message">សួស្តី %1$s! គណនីរបស់អ្នកត្រូវបានបង្កើតដោយជោគជ័យ។ សូមចូលប្រើប្រាស់ដើម្បីចូលរួមព្រឹត្តិការណ៍។</string>
 </resources>

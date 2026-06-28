@@ -100,7 +100,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                     Registration registration = new Registration(userId, event.getId(), timestamp, "Registered");
                     
                     db.registrationDao().insertRegistration(registration);
-                    
+
+                    // Action 2: confirm the event registration. Action 3: schedule the 10-minute reminder.
+                    NotificationHelper.scheduleEventReminder(context, event);
+                    String notifTitle = "ការចុះឈ្មោះជោគជ័យ";
+                    String notifMessage = "អ្នកបានចុះឈ្មោះសម្រាប់ព្រឹត្តិការណ៍ \"" + event.getTitle() + "\"។";
+                    NotificationHelper.saveNotificationToDb(context, notifTitle, notifMessage, "Registration");
+                    NotificationHelper.showSystemNotification(context, event.getId() + 500000, notifTitle, notifMessage);
+
                     if (context instanceof android.app.Activity activity) {
                         activity.runOnUiThread(() -> Toast.makeText(context, R.string.register_success, Toast.LENGTH_SHORT).show());
                     }

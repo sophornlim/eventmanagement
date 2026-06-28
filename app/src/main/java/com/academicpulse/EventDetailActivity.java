@@ -76,6 +76,7 @@ public class EventDetailActivity extends AppCompatActivity {
                 String notifTitle = "ការចុះឈ្មោះជោគជ័យ";
                 String notifMessage = "អ្នកបានចុះឈ្មោះសម្រាប់ព្រឹត្តិការណ៍ \"" + event.getTitle() + "\"។";
                 NotificationHelper.saveNotificationToDb(this, notifTitle, notifMessage, "Registration");
+                NotificationHelper.showSystemNotification(this, eventId + 500000, notifTitle, notifMessage);
 
                 runOnUiThread(() -> {
                     Toast.makeText(this, "ចុះឈ្មោះជោគជ័យ!", Toast.LENGTH_SHORT).show();

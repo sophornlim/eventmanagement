@@ -1,10 +1,14 @@
 package com.academicpulse;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+
+import androidx.core.app.NotificationCompat;
 
 import com.academicpulse.database.AppDatabase;
 import com.academicpulse.database.entity.Event;
@@ -21,6 +25,7 @@ import java.util.concurrent.Executors;
 public class NotificationHelper {
 
     public static final String ACTION_EVENT_REMINDER = "com.academicpulse.ACTION_EVENT_REMINDER";
+    public static final String CHANNEL_ID = "event_reminder_channel";
 
     public static void scheduleEventReminder(Context context, Event event) {
         if (event == null || event.getDate() == null || event.getTime() == null) {
@@ -79,6 +84,46 @@ public class NotificationHelper {
                 db.notificationDao().insertNotification(notification);
             });
         }
+    }
+
+    /**
+     * Save a notification for a specific student. Used when the student is not logged in yet
+     * (e.g. right after they register an account, before a session exists).
+     */
+    public static void saveNotificationForStudent(Context context, String studentId, String title, String message, String type) {
+        if (studentId == null) {
+            return;
+        }
+        Executors.newSingleThreadExecutor().execute(() -> {
+            AppDatabase db = AppDatabase.getInstance(context);
+            String sentAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+            Notification notification = new Notification(0, studentId, title, message, sentAt, false, type);
+            db.notificationDao().insertNotification(notification);
+        });
+    }
+
+    /**
+     * Immediately show a system (heads-up) notification. Degrades gracefully if the
+     * POST_NOTIFICATIONS permission has not been granted on Android 13+.
+     */
+    public static void showSystemNotification(Context context, int notifId, String title, String message) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager == null) {
+            return;
+        }
+
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Event Reminders", NotificationManager.IMPORTANCE_HIGH);
+        notificationManager.createNotificationChannel(channel);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true);
+
+        notificationManager.notify(notifId, builder.build());
     }
 
     public static void rescheduleAllReminders(Context context) {

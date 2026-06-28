@@ -58,7 +58,13 @@ public class RegisterActivity extends AppCompatActivity {
                 Student student = new Student(studentId, name, email, "", "student", password);
                 student.setGender(finalGender);
                 db.studentDao().insertStudent(student);
-                
+
+                // Action 1: notify the student that their account was created.
+                String welcomeTitle = getString(R.string.notif_welcome_title);
+                String welcomeMessage = getString(R.string.notif_welcome_message, name);
+                NotificationHelper.saveNotificationForStudent(this, studentId, welcomeTitle, welcomeMessage, "System");
+                NotificationHelper.showSystemNotification(this, studentId.hashCode(), welcomeTitle, welcomeMessage);
+
                 runOnUiThread(() -> {
                     Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show();
                     finish();
